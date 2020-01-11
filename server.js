@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const MongoClient = require('mongodb').MongoClient;
 const app = require('./app');
 const moviesDAO = require('./src/dao/movies.DAO');
