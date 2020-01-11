@@ -1,9 +1,11 @@
 const express = require('express');
 const movieRoute = require('./src/routes/movies.route');
+const cors = require('cors');
 
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
 // Routes
