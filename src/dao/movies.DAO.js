@@ -21,7 +21,7 @@ const getMovies = async () => {
         return docs;
     } catch (e) {
         console.error(`Unable to issue find command ${e}`);
-        return { docs: [] }
+        return { error: e }
     }
 }
 
@@ -31,7 +31,7 @@ const getMovieByID = async (id) => {
         return doc;
     } catch (e) {
         console.error(`Unable to issue find command ${e}`);
-        return { doc: {} }
+        return { error: e }
     }
 }
 
@@ -45,9 +45,23 @@ const insertMovie = async (movie) => {
     }
 }
 
+const updateMovie = async (id, movieDetals) => {
+    try {
+        const result = await movies.updateOne(
+            { _id: ObjectID(id) },
+            { $set: movieDetals }
+        );
+        return result;
+    } catch (e) {
+        console.error(`Unable to issue update command ${e}`);
+        return { error: e };
+    }
+}
+
 module.exports = {
     injectDB,
     getMovies,
     getMovieByID,
-    insertMovie
+    insertMovie,
+    updateMovie
 }

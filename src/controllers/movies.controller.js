@@ -31,10 +31,37 @@ const apiGetMovieDetail = async (req, res, next) => {
 }
 
 const apiUpdateMovie = async (req, res, next) => {
-    // TODO: Update movie
-    res.json({
-        result: 'success'
-    });
+    try {
+        const movieID = req.params.id;
+        const movieFromBody = req.body;
+        const movie = {
+            name: movieFromBody.name,
+            genre: movieFromBody.genre,
+            image: movieFromBody.image || null,
+            releaseYear: movieFromBody.releaseYear || null
+        }
+        const updateResult = await moviesDAO.updateMovie(movieID, movie);
+
+        if (updateResult.error) {
+            res.json({
+                error: `Unable to update movie ${updateResult.error}`
+            });
+            return;
+        }
+        if (updateResult.modifiedCount == 0) {
+            res.json({
+                error: `Unable to update movie`
+            });
+            return;
+        }
+        const updatedMovie = await moviesDAO.getMovieByID(movieID);
+        res.json(updatedMovie)
+    } catch (e) {
+        console.error(`API: ${e}`);
+        res.status(500).json({
+            error: e
+        });
+    }
 }
 
 module.exports = {
