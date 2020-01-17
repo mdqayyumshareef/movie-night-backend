@@ -57,7 +57,34 @@ const apiUpdateMovie = async (req, res, next) => {
         const updatedMovie = await moviesDAO.getMovieByID(movieID);
         res.json(updatedMovie)
     } catch (e) {
-        console.error(`API: ${e}`);
+        console.error(`API update movie: ${e}`);
+        res.status(500).json({
+            error: e
+        });
+    }
+}
+
+const apiDeleteMovie = async (req, res, next) => {
+    try {
+        const movieID = req.params.id;
+        const delResult = await moviesDAO.deleteMovieByID(movieID);
+
+        if (delResult.error) {
+            res.json({
+                error: `Unable to delete movie ${delResult.error}`
+            });
+            return;
+        }
+        if (delResult.deletedCount == 0) {
+            res.json({
+                error: `Unable to delete movie`
+            });
+            return;
+        }
+
+        res.json(delResult);
+    } catch (e) {
+        console.error(`API delete movie: ${e}`);
         res.status(500).json({
             error: e
         });
@@ -68,5 +95,6 @@ module.exports = {
     apiGetMovies,
     apiPostMovie,
     apiGetMovieDetail,
-    apiUpdateMovie
+    apiUpdateMovie,
+    apiDeleteMovie
 }

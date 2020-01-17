@@ -58,10 +58,21 @@ const updateMovie = async (id, movieDetals) => {
     }
 }
 
+const deleteMovieByID = async (id) => {
+    try {
+        const deleteResult = await movies.deleteOne({ _id: ObjectID(id) });
+        return deleteResult;
+    } catch (e) {
+        console.error(`Unable to issue delete command ${e}`);
+        return { error: e }
+    }
+}
+
 module.exports = {
     injectDB,
     getMovies,
     getMovieByID,
     insertMovie,
-    updateMovie
+    updateMovie,
+    deleteMovieByID
 }

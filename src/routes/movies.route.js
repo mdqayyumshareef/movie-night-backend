@@ -10,5 +10,6 @@ movieRoute.route('/')
 movieRoute.route('/:id')
     .get(movieCtrl.apiGetMovieDetail)
     .put(movieCtrl.apiUpdateMovie)
+    .delete(movieCtrl.apiDeleteMovie)
 
 module.exports = movieRoute;
