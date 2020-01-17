@@ -16,7 +16,7 @@ const injectDB = async (db) => {
 
 const getMovies = async () => {
     try {
-        const query = await movies.find({});
+        const query = await movies.find({}).sort({ _id: -1 });
         const docs = await query.toArray();
         return docs;
     } catch (e) {
