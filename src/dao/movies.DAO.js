@@ -1,5 +1,35 @@
 const ObjectID = require('mongodb').ObjectId;
 
+const movieSchema = {
+    $jsonSchema: {
+        bsonType: 'object',
+        additionalProperties: false,
+        required: ['name', 'genre', 'image', 'releaseYear'],
+        properties: {
+            _id: {
+                bsonType: 'objectId'
+            },
+            name: {
+                bsonType: 'string',
+                description: 'must be a string and is required'
+            },
+            genre: {
+                bsonType: 'string',
+                description: 'must be a string and is required'
+            },
+            image: {
+                bsonType: 'string',
+                description: 'must be a string and is required'
+
+            },
+            releaseYear: {
+                bsonType: 'string',
+                description: 'must be a string and is required'
+            }
+        }
+    }
+}
+
 let movies;
 
 const injectDB = async (db) => {
@@ -7,7 +37,8 @@ const injectDB = async (db) => {
         return;
     } else {
         try {
-            movies = db.collection('movies');
+            movies = await db.collection('movies');
+            await db.command({ collMod: 'movies', validator: movieSchema });
         } catch (e) {
             console.error(`Unable to establish connection in moviesDAO ${e}`);
         }

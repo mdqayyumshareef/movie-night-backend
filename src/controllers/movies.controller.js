@@ -7,13 +7,8 @@ const apiGetMovies = async (req, res, next) => {
 
 const apiPostMovie = async (req, res, next) => {
     const movieFromBody = req.body;
-    let movie = {
-        name: movieFromBody.name,
-        genre: movieFromBody.genre,
-        image: movieFromBody.image || null,
-        releaseYear: movieFromBody.releaseYear || null
-    }
-    const insertResult = await moviesDAO.insertMovie(movie);
+    const insertResult = await moviesDAO.insertMovie(movieFromBody);
+    
     if (insertResult.id) {
         const doc = await moviesDAO.getMovieByID(insertResult.id);
         res.json(doc);
@@ -34,13 +29,7 @@ const apiUpdateMovie = async (req, res, next) => {
     try {
         const movieID = req.params.id;
         const movieFromBody = req.body;
-        const movie = {
-            name: movieFromBody.name,
-            genre: movieFromBody.genre,
-            image: movieFromBody.image || null,
-            releaseYear: movieFromBody.releaseYear || null
-        }
-        const updateResult = await moviesDAO.updateMovie(movieID, movie);
+        const updateResult = await moviesDAO.updateMovie(movieID, movieFromBody);
 
         if (updateResult.error) {
             res.json({
